@@ -1,8 +1,8 @@
-#include "VRTPRecorderMicrophon.h"
+#include "MjRecorderMicrophon.h"
 
 #include <QFile>
 #include <QtMultimedia/QAudioDeviceInfo>
-#include "sxSignalWaiter.h"
+#include "MjSignalWaiter.h"
 
 
 enum class VBufSize{
@@ -14,17 +14,17 @@ enum class VBufSize{
     stereo44100 = 2*mono44100,
 };
 
-VRTPRecorderMicrophon::VRTPRecorderMicrophon(QObject *parent, const QString & destFileName)
+MjRecorderMicrophon::MjRecorderMicrophon(QObject *parent, const QString & destFileName)
 {
     Q_UNUSED(parent);
     m_filename = destFileName;
 }
 
-VRTPRecorderMicrophon::~VRTPRecorderMicrophon()
+MjRecorderMicrophon::~MjRecorderMicrophon()
 {
 }
 
-void VRTPRecorderMicrophon::run()
+void MjRecorderMicrophon::run()
 {
     initMP3();
     m_stop = false;
@@ -43,7 +43,7 @@ void VRTPRecorderMicrophon::run()
     m_audioInput->start(m_audioBuffer.get());
 
     qDebug() << QString("Start Voice Recording");    
-    sxSignalWaiter::wait(this, SIGNAL(nullsignal()), 100);
+    MjSignalWaiter::wait(this, SIGNAL(nullsignal()), 100);
     while(m_stop == false){
         nCounter = 0;
         if (m_audioBuffer == NULL)
@@ -57,13 +57,13 @@ void VRTPRecorderMicrophon::run()
             emit changeLevel(level);
             convertAndSaveData(data.data(), nCounter);
         }
-        sxSignalWaiter::wait(this, SIGNAL(nullsignal()), 10);
+        MjSignalWaiter::wait(this, SIGNAL(nullsignal()), 10);
     }
     destroyStreamer();
     qDebug() << QString("Stop Rcording Voice");
 }
 
-quint32 VRTPRecorderMicrophon::convertAndSaveData(char *data, quint32 nCounter)
+quint32 MjRecorderMicrophon::convertAndSaveData(char *data, quint32 nCounter)
 {
     std::vector<char> buffer(static_cast<int>(VBufSize::mono44100), 0);
     nCounter = EncodersDecoders::PCM_To_MP3(gfp, (unsigned char*)(buffer.data()), data, nCounter / 2);
@@ -79,7 +79,7 @@ quint32 VRTPRecorderMicrophon::convertAndSaveData(char *data, quint32 nCounter)
     return nCounter;
 }
 
-void VRTPRecorderMicrophon::initMP3()
+void MjRecorderMicrophon::initMP3()
 {
     gfp = lame_init();
     lame_set_num_channels(gfp,1);
@@ -99,7 +99,7 @@ void VRTPRecorderMicrophon::initMP3()
     m_audioFormat.setSampleType(QAudioFormat::SignedInt);
 }
 
-void VRTPRecorderMicrophon::destroyStreamer()
+void MjRecorderMicrophon::destroyStreamer()
 {
     lame_close(gfp); 
     if (m_destinationFile) {
@@ -114,7 +114,7 @@ void VRTPRecorderMicrophon::destroyStreamer()
     }
 }
 
-void VRTPRecorderMicrophon::stop() 
+void MjRecorderMicrophon::stop() 
 {
     m_mutex.lock();
     m_stop = true;

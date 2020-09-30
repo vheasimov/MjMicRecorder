@@ -1,11 +1,11 @@
-#include <sxSignalWaiter.h>
+#include <MjSignalWaiter.h>
 #include <QCoreApplication>
 #include <QTimerEvent>
 
-class sxSignalWaiterPrivate : public sxPrivate<sxSignalWaiter>
+class MjSignalWaiterPrivate : public sxPrivate<MjSignalWaiter>
 {
 public:
-    sxSignalWaiterPrivate()
+    MjSignalWaiterPrivate()
     {
         ready = false;
         emitted = false;
@@ -26,23 +26,22 @@ public:
     }
 };
 
-//-------------------------------------------------------------------------
-sxSignalWaiter::sxSignalWaiter(const QObject* sender, const char* signal) : QObject(0)
+MjSignalWaiter::MjSignalWaiter(const QObject* sender, const char* signal) : QObject(0)
 {
     Q_ASSERT(sender && signal);
-    SX_INIT_PRIVATE(sxSignalWaiter);
+    SX_INIT_PRIVATE(MjSignalWaiter);
     connect(sender, signal, this, SLOT(signalCaught()));
 }
-//-------------------------------------------------------------------------
-bool sxSignalWaiter::wait(const QObject* sender, const char* signal, int msec, QEventLoop::ProcessEventsFlags flags)
+
+bool MjSignalWaiter::wait(const QObject* sender, const char* signal, int msec, QEventLoop::ProcessEventsFlags flags)
 {
-    sxSignalWaiter w(sender, signal);
+    MjSignalWaiter w(sender, signal);
     return w.wait(msec, flags);
 }
-//-------------------------------------------------------------------------
-bool sxSignalWaiter::wait(int msec, QEventLoop::ProcessEventsFlags flags)
+
+bool MjSignalWaiter::wait(int msec, QEventLoop::ProcessEventsFlags flags)
 {
-    sxSignalWaiterPrivate& d = qxt_d();
+    MjSignalWaiterPrivate& d = qxt_d();
 
     // Clear the emission status
     d.ready = false;
@@ -72,29 +71,28 @@ bool sxSignalWaiter::wait(int msec, QEventLoop::ProcessEventsFlags flags)
     d.waiting = false;
     return d.ready;
 }
-//-------------------------------------------------------------------------
-bool sxSignalWaiter::hasCapturedSignal() const
+
+bool MjSignalWaiter::hasCapturedSignal() const
 {
     return qxt_d().emitted;
 }
-//-------------------------------------------------------------------------
-void sxSignalWaiter::signalCaught()
+
+void MjSignalWaiter::signalCaught()
 {
     if (!qxt_d().waiting) return;
     qxt_d().ready = true;
     qxt_d().stopTimer();
 }
-//-------------------------------------------------------------------------
-void sxSignalWaiter::timerEvent(QTimerEvent* event)
+
+void MjSignalWaiter::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event);
     cancelWait();
 }
-//-------------------------------------------------------------------------
-void sxSignalWaiter::cancelWait()
+
+void MjSignalWaiter::cancelWait()
 {
     if (!qxt_d().waiting) return;
     qxt_d().timeout = true;
     qxt_d().stopTimer();
 }
-//-------------------------------------------------------------------------

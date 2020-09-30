@@ -1,5 +1,5 @@
-#ifndef SXSIGNALWAITER_H
-#define SXSIGNALWAITER_H
+#ifndef MjSignalWaiter_H
+#define MjSignalWaiter_H
 
 #include <QtGlobal>
 #include <QObject>
@@ -74,14 +74,14 @@ private:
 };
 
 
-class sxSignalWaiterPrivate;
+class MjSignalWaiterPrivate;
 
-class sxSignalWaiter : public QObject
+class MjSignalWaiter : public QObject
 {
     Q_OBJECT
-    SX_DECLARE_PRIVATE(sxSignalWaiter)
+    SX_DECLARE_PRIVATE(MjSignalWaiter)
 public:
-    sxSignalWaiter(const QObject* sender, const char* signal);
+    MjSignalWaiter(const QObject* sender, const char* signal);
 
     static bool wait(const QObject* sender, const char* signal, int msec = -1, QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents);
 

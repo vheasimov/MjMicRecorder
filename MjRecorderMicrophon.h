@@ -1,5 +1,5 @@
-#ifndef VRTPRecorderMicrophon_h
-#define VRTPRecorderMicrophon_h
+#ifndef MjRecorderMicrophon_h
+#define MjRecorderMicrophon_h
 
 #include <QtMultimedia/QAudioInput>
 #include <QtMultimedia/QAudioFormat>
@@ -10,14 +10,14 @@
 #include "MjBuffer.h"
 #include "EncodersDecoders.h"
 
-class VRTPRecorderMicrophon : public QThread
+class MjRecorderMicrophon : public QThread
 {
     Q_OBJECT
 
 public:
 
-    VRTPRecorderMicrophon(QObject *parent, const QString & destFileName);
-    virtual ~VRTPRecorderMicrophon();
+    MjRecorderMicrophon(QObject *parent, const QString & destFileName);
+    virtual ~MjRecorderMicrophon();
 
     void run();
     void stop();

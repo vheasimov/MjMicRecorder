@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QMainWindow>
 
-#include "VRTPRecorderMicrophon.h"
+#include "MjRecorderMicrophon.h"
 
 #include "ui_MjMicRecorder.h"
 
@@ -22,7 +22,7 @@ public slots:
 private:
     Ui::MjMicRecorderClass ui;
 
-    VRTPRecorderMicrophon * recorder_{ nullptr };
+    MjRecorderMicrophon * recorder_{ nullptr };
 };
 
 #endif // MJMICRECORDER_H

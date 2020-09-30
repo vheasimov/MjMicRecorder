@@ -32,8 +32,8 @@ add_executable(MjMicRecorder
     MjMicRecorder.cpp 
     MjBuffer.cpp
     EncodersDecoders.cpp
-    sxSignalWaiter.cpp 
-    VRTPRecorderMicrophon.cpp 
+    MjSignalWaiter.cpp 
+    MjRecorderMicrophon.cpp 
     MjMicRecorder.ui 
     MjMicRecorder.qrc
 )
